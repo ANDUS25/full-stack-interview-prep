@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
-import CustomTextInput from '../../component/CustomTextInput';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import CustomButton from '../../component/CustomButton';
+import CustomTextInput from '../../component/CustomTextInput';
+import axios from 'axios';
 
 const data = [
   {
@@ -23,6 +24,22 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
 
   const [question, setQuestion] = useState<string>('');
   const [answer, setAnswer] = useState<string>('');
+  const [subjectData, setSubjectData] = useState<string>([]);
+
+  const getSubjectData = async () => {
+    try {
+      const res = await axios.get(`http://10.0.2.2:8000/${subject}`);
+      console.log('res', res);
+
+      if (res && res.status === 200 && res.data) setSubjectData(res.data.data);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  useEffect(() => {
+    getSubjectData();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -46,7 +63,7 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
       <View>
         <Text style={styles.listHeader}>Summery of Questions and Answers</Text>
         <FlatList
-          data={data}
+          data={subjectData}
           renderItem={({ index, item }) => (
             <View style={styles.listItem}>
               <View style={styles.listItemContent}>
