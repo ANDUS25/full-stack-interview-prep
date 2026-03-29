@@ -3,7 +3,7 @@ import LottieView from 'lottie-react-native';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import style from './styles';
-import { screeName } from '../../Utils/Title';
+import { screeName } from '../../utils/Title';
 
 const Splash = () => {
   const navigation = useNavigation();

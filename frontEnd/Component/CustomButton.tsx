@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Color } from '../Utils/Colors';
+import { Color } from '../utils/Colors';
 
 const CustomButton = ({ ...props }) => {
   const { name, style, onPress } = props;

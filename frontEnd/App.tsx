@@ -2,9 +2,9 @@ import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Landing from './Screens/Landing';
+import Landing from './Screens/Landing/Landing';
 import Splash from './Screens/Splash/Splash';
-import { screeName } from './Utils/Title';
+import { screeName } from './utils/Title';
 import Subject from './Screens/Subject/Subject';
 
 const RootStack = createNativeStackNavigator({

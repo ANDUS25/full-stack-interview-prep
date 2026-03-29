@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 
 interface CustomTextInputProps {
   placeHolder: string;
@@ -15,18 +15,22 @@ const CustomTextInput = ({ ...props }: CustomTextInputProps) => {
     <TextInput
       placeholder={placeHolder}
       value={value}
-      onChange={inputData => onChange(inputData)}
-      style={{
-        backgroundColor: 'tansparent',
-        borderWidth: 1,
-        borderColor: 'gray',
-        padding: 10,
-        marginVertical: 10,
-        borderRadius: 10,
-      }}
+      onChangeText={onChange}
+      style={styles.textStyle}
       multiline={multiline}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  textStyle: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    marginVertical: 10,
+    borderRadius: 10,
+  },
+});
 
 export default CustomTextInput;

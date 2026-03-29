@@ -1,8 +1,8 @@
-import React from 'react';
-import { View } from 'react-native';
-import CustomButton from '../Component/CustomButton';
 import { useNavigation } from '@react-navigation/native';
-import { screeName, subject } from '../Utils/Title';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import CustomButton from '../../component/CustomButton';
+import { screeName, subject } from '../../utils/Title';
 
 const Landing = () => {
   const navigation = useNavigation<any>();
@@ -10,9 +10,9 @@ const Landing = () => {
   const handleSubjectNavigation = (subjectName: string) => {
     navigation.navigate(screeName.SUBJECT, { subject: subjectName });
   };
-  
+
   return (
-    <View style={{ marginHorizontal: 15 }}>
+    <View style={styles.container}>
       <CustomButton
         name="React"
         onPress={() => handleSubjectNavigation(subject.REACT)}
@@ -40,5 +40,9 @@ const Landing = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { marginHorizontal: 15 },
+});
 
 export default Landing;

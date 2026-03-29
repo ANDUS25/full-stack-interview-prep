@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import CustomTextInput from '../../Component/CustomTextInput';
-import CustomButton from '../../Component/CustomButton';
+import { RouteProp } from '@react-navigation/native';
+import CustomTextInput from '../../component/CustomTextInput';
+import CustomButton from '../../component/CustomButton';
 
 const data = [
   {
@@ -16,16 +17,16 @@ const data = [
   },
 ];
 
-const Subject = ({ route }) => {
+const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   const { params } = route;
-  const { subject } = params;
+  const { subject } = params || {};
 
   const [question, setQuestion] = useState<string>('');
   const [answer, setAnswer] = useState<string>('');
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 20, textAlign: 'center', marginVertical: 20 }}>
+      <Text style={styles.screenHeader}>
         Welcome to the {subject} Interview Preparation
       </Text>
       <CustomButton name="Add a New one" />
@@ -87,4 +88,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  screenHeader: { fontSize: 20, textAlign: 'center', marginVertical: 20 },
 });
