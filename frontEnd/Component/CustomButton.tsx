@@ -3,9 +3,10 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Color } from '../Utils/Colors';
 
 const CustomButton = ({ ...props }) => {
-  const { name, style } = props;
+  const { name, style, onPress } = props;
+
   return (
-    <TouchableOpacity style={style ?? styles.buttonContainer}>
+    <TouchableOpacity style={style ?? styles.buttonContainer} onPress={onPress}>
       <Text style={styles.buttonNameView}>{name}</Text>
     </TouchableOpacity>
   );

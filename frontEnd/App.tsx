@@ -1,11 +1,11 @@
-import React from 'react';
-import { StatusBar, useColorScheme } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Landing from './Screens/Landing';
 import Splash from './Screens/Splash/Splash';
 import { screeName } from './Utils/Title';
+import Subject from './Screens/Subject/Subject';
 
 const RootStack = createNativeStackNavigator({
   screens: {
@@ -23,17 +23,21 @@ const RootStack = createNativeStackNavigator({
         headerShown: true,
       },
     },
+    Subject: {
+      screen: Subject,
+      options: {
+        title: screeName.SUBJECT,
+        headerShown: true,
+      },
+    },
   },
 });
 
 const Navigation = createStaticNavigation(RootStack);
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <Navigation />
     </SafeAreaProvider>
   );

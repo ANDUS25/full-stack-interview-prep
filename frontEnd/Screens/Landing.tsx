@@ -1,87 +1,44 @@
-import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import CustomButton from '../Component/CustomButton';
-import CustomTextInput from '../Component/CustomTextInput';
-
-const data = [
-  {
-    id: 1,
-    question: 'What is your name',
-    answer: 'My Name is Anand Chavan',
-  },
-  {
-    id: 2,
-    question: 'How your are doing today?',
-    answer: "I'm doing great today, What about you? How your are doing today?",
-  },
-];
+import { useNavigation } from '@react-navigation/native';
+import { screeName, subject } from '../Utils/Title';
 
 const Landing = () => {
-  const [question, setQuestion] = useState<string>('');
-  const [answer, setAnswer] = useState<string>('');
+  const navigation = useNavigation<any>();
 
+  const handleSubjectNavigation = (subjectName: string) => {
+    navigation.navigate(screeName.SUBJECT, { subject: subjectName });
+  };
+  
   return (
-    <View style={styles.container}>
-      <CustomButton name="Add a New one" />
-
-      <CustomTextInput
-        placeHolder="Enter your question"
-        onChange={setQuestion}
-        value={question}
+    <View style={{ marginHorizontal: 15 }}>
+      <CustomButton
+        name="React"
+        onPress={() => handleSubjectNavigation(subject.REACT)}
       />
-      <CustomTextInput
-        placeHolder="Enter your Answer"
-        multiline={true}
-        onChange={setAnswer}
-        value={answer}
+      <CustomButton
+        name="React Native"
+        onPress={() => handleSubjectNavigation(subject.REACT_NATIVE)}
       />
-
-      <View>
-        <Text style={styles.listHeader}>Summery of Questions and Answers</Text>
-        <FlatList
-          data={data}
-          renderItem={({ index, item }) => (
-            <View style={styles.listItem}>
-              <View style={styles.listItemContent}>
-                <Text>
-                  {index + 1}. {item.question}
-                </Text>
-                <Text style={styles.listItemAnswer}>{item.answer}</Text>
-              </View>
-              <View
-                style={styles.listItemActions}
-              >
-                <CustomButton name="Update" />
-                <CustomButton name="Delete" />
-              </View>
-            </View>
-          )}
-        />
-      </View>
+      <CustomButton
+        name="System Design"
+        onPress={() => handleSubjectNavigation(subject.SYSTEM_DESIGN)}
+      />
+      <CustomButton
+        name="Javascript"
+        onPress={() => handleSubjectNavigation(subject.JAVASCRIPT)}
+      />
+      <CustomButton
+        name="Node"
+        onPress={() => handleSubjectNavigation(subject.NODE)}
+      />
+      <CustomButton
+        name="Express.js"
+        onPress={() => handleSubjectNavigation(subject.EXPRESS_JS)}
+      />
     </View>
   );
 };
 
 export default Landing;
-
-const styles = StyleSheet.create({
-  container: { flex: 1, marginHorizontal: 15 },
-  listHeader: { fontWeight: 'bold', fontSize: 18, textAlign: 'center' },
-  listItem: {
-    marginVertical: 7,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  listItemContent: {
-    flexDirection: 'column',
-    width: '60%',
-  },
-  listItemAnswer: {
-    paddingLeft: 15,
-  },
-  listItemActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-
-});
