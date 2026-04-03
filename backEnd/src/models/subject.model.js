@@ -13,6 +13,11 @@ const subjectSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
+    notes: {
+      type: String,
+      trim: true,
+      lowercase: true,
+    },
   },
   { timestamps: true },
 );

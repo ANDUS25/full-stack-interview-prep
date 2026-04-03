@@ -10,11 +10,18 @@ const subjectController = async (req, res) => {
   console.log("getSUbjectData", getSUbjectData);
 
   try {
-    res
+    if (!getSUbjectData || getSUbjectData.length === 0) {
+      return res.status(404).json({
+        status: "error",
+        message: "No data Found of this subject",
+        responseCode: 404,
+      });
+    }
+    return res
       .status(200)
       .json({ status: "success", data: getSUbjectData, responseCode: 200 });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };
 export default subjectController;

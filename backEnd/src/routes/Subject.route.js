@@ -3,7 +3,7 @@ import subjectController from "../controller/subject.controller.js";
 
 const router = express.Router();
 
-// This route is for user registration
+// This route is to get subject specific data
 router.get("/:subject", subjectController);
 
 export default router;

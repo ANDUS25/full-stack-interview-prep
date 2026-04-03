@@ -1,22 +1,18 @@
 import { RouteProp } from '@react-navigation/native';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import CustomButton from '../../component/CustomButton';
 import CustomTextInput from '../../component/CustomTextInput';
-import axios from 'axios';
-
-const data = [
-  {
-    id: 1,
-    question: 'What is your name',
-    answer: 'My Name is Anand Chavan',
-  },
-  {
-    id: 2,
-    question: 'How your are doing today?',
-    answer: "I'm doing great today, What about you? How your are doing today?",
-  },
-];
+import CustomLoader from '../../component/CustomLoader';
+import CustomAnimation from '../../component/CustomAnimation';
+import { Color } from '../../utils/Colors';
 
 const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   const { params } = route;
@@ -25,15 +21,24 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   const [question, setQuestion] = useState<string>('');
   const [answer, setAnswer] = useState<string>('');
   const [subjectData, setSubjectData] = useState<string>([]);
+  const [fetchDataError, setFetchDataError] = useState<boolean>(false);
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
 
   const getSubjectData = async () => {
+    setIsDataLoading(true);
     try {
       const res = await axios.get(`http://10.0.2.2:8000/${subject}`);
       console.log('res', res);
 
       if (res && res.status === 200 && res.data) setSubjectData(res.data.data);
+      else {
+        setFetchDataError(true);
+        setIsDataLoading(false);
+      }
     } catch (error) {
       console.log('error', error);
+    } finally {
+      setIsDataLoading(false);
     }
   };
 
@@ -48,7 +53,7 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
       </Text>
       <CustomButton name="Add a New one" />
 
-      <CustomTextInput
+      {/* <CustomTextInput
         placeHolder="Enter your question"
         onChange={setQuestion}
         value={question}
@@ -58,28 +63,40 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
         multiline={true}
         onChange={setAnswer}
         value={answer}
-      />
+      /> */}
 
-      <View>
-        <Text style={styles.listHeader}>Summery of Questions and Answers</Text>
-        <FlatList
-          data={subjectData}
-          renderItem={({ index, item }) => (
-            <View style={styles.listItem}>
-              <View style={styles.listItemContent}>
-                <Text>
-                  {index + 1}. {item.question}
-                </Text>
-                <Text style={styles.listItemAnswer}>{item.answer}</Text>
+      {fetchDataError ? (
+        <View>
+          <Text style={styles.listHeader}>
+            Summery of Questions and Answers
+          </Text>
+          <FlatList
+            data={subjectData}
+            renderItem={({ index, item }) => (
+              <View style={styles.listItem}>
+                <View style={styles.listItemContent}>
+                  <Text>
+                    {index + 1}. {item.question}
+                  </Text>
+                  <Text style={styles.listItemAnswer}>{item.answer}</Text>
+                </View>
+                <View style={styles.listItemActions}>
+                  <CustomButton name="Update" onPress={() => {}} />
+                  <CustomButton name="Delete" onPress={() => {}} />
+                </View>
               </View>
-              <View style={styles.listItemActions}>
-                <CustomButton name="Update" onPress={() => {}} />
-                <CustomButton name="Delete" onPress={() => {}} />
-              </View>
-            </View>
-          )}
-        />
-      </View>
+            )}
+          />
+        </View>
+      ) : (
+        <View>
+          <CustomAnimation
+            path={require('../../assets/gif/No data Found.json')}
+          />
+        </View>
+      )}
+
+      {isDataLoading && <CustomLoader />}
     </View>
   );
 };
@@ -87,23 +104,24 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
 export default Subject;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, marginHorizontal: 15 },
+  container: { flex: 1, paddingHorizontal: 15, backgroundColor: Color.White },
   listHeader: { fontWeight: 'bold', fontSize: 18, textAlign: 'center' },
   listItem: {
     marginVertical: 7,
-    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   listItemContent: {
     flexDirection: 'column',
-    width: '60%',
+    width: '100%',
   },
   listItemAnswer: {
     paddingLeft: 15,
+    fontFamily: 'Nunito-ExtraLight',
   },
   listItemActions: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
   },
   screenHeader: { fontSize: 20, textAlign: 'center', marginVertical: 20 },
 });
