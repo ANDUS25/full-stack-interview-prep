@@ -1,33 +1,34 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import CustomButton from '../../component/CustomButton';
-import CustomTextInput from '../../component/CustomTextInput';
-import CustomLoader from '../../component/CustomLoader';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import CustomAnimation from '../../component/CustomAnimation';
+import CustomButton from '../../component/CustomButton';
+import CustomLoader from '../../component/CustomLoader';
 import { Color } from '../../utils/Colors';
+import { screenName } from '../../utils/Title';
+import { BASE_URL } from '@env';
+
+console.log('BASE_URL', BASE_URL);
 
 const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   const { params } = route;
   const { subject } = params || {};
 
-  const [question, setQuestion] = useState<string>('');
-  const [answer, setAnswer] = useState<string>('');
-  const [subjectData, setSubjectData] = useState<string>([]);
+  const [subjectData, setSubjectData] = useState<string[]>([]);
   const [fetchDataError, setFetchDataError] = useState<boolean>(false);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    getSubjectData();
+  }, []);
 
   const getSubjectData = async () => {
     setIsDataLoading(true);
     try {
-      const res = await axios.get(`http://10.0.2.2:8000/${subject}`);
+      const res = await axios.get(`${BASE_URL}${subject}`);
       console.log('res', res);
 
       if (res && res.status === 200 && res.data) setSubjectData(res.data.data);
@@ -42,30 +43,21 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
     }
   };
 
-  useEffect(() => {
-    getSubjectData();
-  }, []);
+  const navigateToNewQuestionScreen = () => {
+    navigation.navigate(screenName.NEW_QUESTION);
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.screenHeader}>
         Welcome to the {subject} Interview Preparation
       </Text>
-      <CustomButton name="Add a New one" />
-
-      {/* <CustomTextInput
-        placeHolder="Enter your question"
-        onChange={setQuestion}
-        value={question}
+      <CustomButton
+        name="Add a New one"
+        onPress={navigateToNewQuestionScreen}
       />
-      <CustomTextInput
-        placeHolder="Enter your Answer"
-        multiline={true}
-        onChange={setAnswer}
-        value={answer}
-      /> */}
 
-      {fetchDataError ? (
+      {!fetchDataError && !isDataLoading ? (
         <View>
           <Text style={styles.listHeader}>
             Summery of Questions and Answers

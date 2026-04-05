@@ -5,28 +5,36 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Landing from './screens/Landing/Landing';
 import Splash from './screens/Splash/Splash';
 import Subject from './screens/Subject/Subject';
-import { screeName } from './utils/Title';
+import { screenHeader, screenName } from './utils/Title';
+import NewQuestion from './screens/NewQuestion/NewQuestion';
 
 const RootStack = createNativeStackNavigator({
   screens: {
     Splash: {
       screen: Splash,
       options: {
-        title: screeName.SPLASH,
+        title: screenName.SPLASH,
         headerShown: false,
       },
     },
     Home: {
       screen: Landing,
       options: {
-        title: screeName.HOME,
+        title: screenName.HOME,
         headerShown: true,
       },
     },
     Subject: {
       screen: Subject,
       options: {
-        title: screeName.SUBJECT,
+        title: screenName.SUBJECT,
+        headerShown: true,
+      },
+    },
+    NewQuestion: {
+      screen: NewQuestion,
+      options: {
+        title: screenHeader.NEW_QUESTION,
         headerShown: true,
       },
     },

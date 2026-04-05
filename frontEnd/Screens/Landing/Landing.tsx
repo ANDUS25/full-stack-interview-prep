@@ -2,13 +2,13 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import CustomButton from '../../component/CustomButton';
-import { screeName, subject } from '../../utils/Title';
+import { screenName, subject } from '../../utils/Title';
 
 const Landing = () => {
   const navigation = useNavigation<any>();
 
   const handleSubjectNavigation = (subjectName: string) => {
-    navigation.navigate(screeName.SUBJECT, { subject: subjectName });
+    navigation.navigate(screenName.SUBJECT, { subject: subjectName });
   };
 
   return (

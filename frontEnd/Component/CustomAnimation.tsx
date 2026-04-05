@@ -6,7 +6,14 @@ const { width, height } = Dimensions.get('screen');
 const CustomAnimation = ({ ...props }) => {
   const { path } = props;
 
-  return <LottieView source={path} autoPlay loop style={style.lottie} />;
+  return (
+    <LottieView
+      source={path}
+      autoPlay={true}
+      loop={true}
+      style={style.lottie}
+    />
+  );
 };
 
 import { Dimensions, StyleSheet } from 'react-native';
