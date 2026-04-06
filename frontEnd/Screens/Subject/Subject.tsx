@@ -1,27 +1,30 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View, RefreshControl } from 'react-native';
 import CustomAnimation from '../../component/CustomAnimation';
 import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
 import { Color } from '../../utils/Colors';
 import { screenName } from '../../utils/Title';
 import { BASE_URL } from '@env';
-
-console.log('BASE_URL', BASE_URL);
+import CustomModal from '../../component/CustomModal';
 
 const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   const { params } = route;
   const { subject } = params || {};
 
-  const [subjectData, setSubjectData] = useState<string[]>([]);
+  const [subjectData, setSubjectData] = useState<any[]>([]);
   const [fetchDataError, setFetchDataError] = useState<boolean>(false);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
+  const [pullToRefreshLoading, setPullToRefreshLoading] =
+    useState<boolean>(false);
 
   const navigation = useNavigation();
 
+  console.log('subjectData', subjectData);
   useEffect(() => {
+    console.log('BASE_URL', BASE_URL);
     getSubjectData();
   }, []);
 
@@ -33,18 +36,34 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
 
       if (res && res.status === 200 && res.data) setSubjectData(res.data.data);
       else {
+        setSubjectData([]);
         setFetchDataError(true);
         setIsDataLoading(false);
       }
     } catch (error) {
-      console.log('error', error);
+      console.log('Error from getSubjectData', error);
     } finally {
       setIsDataLoading(false);
     }
   };
 
   const navigateToNewQuestionScreen = () => {
-    navigation.navigate(screenName.NEW_QUESTION);
+    navigation.navigate(screenName.NEW_QUESTION, { subject: subject });
+  };
+
+  const pullToRefresh = async () => {
+    setPullToRefreshLoading(true);
+    await getSubjectData();
+    setPullToRefreshLoading(false);
+  };
+
+  const handleDeleteItem = async (id: string) => {
+    try {
+      const res = await axios.delete(`${BASE_URL}${subject}/${id}`);
+      console.log('handleDeleteItem Res', res);
+    } catch (error) {
+      console.log('Error from handleDeleteItem', error);
+    }
   };
 
   return (
@@ -57,13 +76,20 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
         onPress={navigateToNewQuestionScreen}
       />
 
-      {!fetchDataError && !isDataLoading ? (
+      {!fetchDataError && !isDataLoading && subjectData.length > 0 ? (
         <View>
           <Text style={styles.listHeader}>
             Summery of Questions and Answers
           </Text>
           <FlatList
             data={subjectData}
+            refreshControl={
+              <RefreshControl
+                refreshing={pullToRefreshLoading}
+                onRefresh={pullToRefresh}
+              />
+            }
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ index, item }) => (
               <View style={styles.listItem}>
                 <View style={styles.listItemContent}>
@@ -74,7 +100,10 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
                 </View>
                 <View style={styles.listItemActions}>
                   <CustomButton name="Update" onPress={() => {}} />
-                  <CustomButton name="Delete" onPress={() => {}} />
+                  <CustomButton
+                    name="Delete"
+                    onPress={() => handleDeleteItem(item._id)}
+                  />
                 </View>
               </View>
             )}
@@ -87,6 +116,8 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
           />
         </View>
       )}
+
+      <CustomModal header="Are you sure ?" visible={true} setVisible={} />
 
       {isDataLoading && <CustomLoader />}
     </View>

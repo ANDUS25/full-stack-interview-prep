@@ -3,10 +3,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Landing from './screens/Landing/Landing';
+import NewQuestion from './screens/NewQuestion/NewQuestion';
 import Splash from './screens/Splash/Splash';
 import Subject from './screens/Subject/Subject';
-import { screenHeader, screenName } from './utils/Title';
-import NewQuestion from './screens/NewQuestion/NewQuestion';
+import { screenName } from './utils/Title';
 
 const RootStack = createNativeStackNavigator({
   screens: {
@@ -31,10 +31,10 @@ const RootStack = createNativeStackNavigator({
         headerShown: true,
       },
     },
-    NewQuestion: {
+    'New Question': {
       screen: NewQuestion,
       options: {
-        title: screenHeader.NEW_QUESTION,
+        title: screenName.NEW_QUESTION,
         headerShown: true,
       },
     },

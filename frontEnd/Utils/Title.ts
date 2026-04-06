@@ -2,10 +2,6 @@ const screenName = {
   SPLASH: 'Splash',
   HOME: 'Home',
   SUBJECT: 'Subject',
-  NEW_QUESTION: 'NewQuestion',
-};
-
-const screenHeader = {
   NEW_QUESTION: 'New Question',
 };
 
@@ -22,4 +18,4 @@ const endPoint = {
   new_question: 'new-question',
 };
 
-export { screenName, subject, screenHeader, endPoint };
+export { screenName, subject, endPoint };

@@ -1,13 +1,12 @@
-import subjectModel from "../models/subject.model.js";
+import questionModel from "../models/question.model.js";
 
 const subjectController = async (req, res) => {
   const data = req?.params?.subject;
   console.log("data", data);
 
-  const getSUbjectData = await subjectModel.find({
+  const getSUbjectData = await questionModel.find({
     subject: data.toLowerCase(),
   });
-  console.log("getSUbjectData", getSUbjectData);
 
   try {
     if (!getSUbjectData || getSUbjectData.length === 0) {
@@ -17,6 +16,8 @@ const subjectController = async (req, res) => {
         responseCode: 404,
       });
     }
+
+    console.log("getSUbjectData", getSUbjectData);
     return res
       .status(200)
       .json({ status: "success", data: getSUbjectData, responseCode: 200 });
