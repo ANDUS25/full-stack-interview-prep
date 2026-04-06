@@ -1,14 +1,14 @@
 import { BASE_URL } from '@env';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, ToastAndroid, View } from 'react-native';
 import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
 import CustomModal from '../../component/CustomModal';
 import CustomTextInput from '../../component/CustomTextInput';
 import { Color } from '../../utils/Colors';
 import { endPoint, screenName } from '../../utils/Title';
-import { useNavigation } from '@react-navigation/native';
 
 const NewQuestion = ({ ...props }) => {
   const { route } = props;
@@ -16,6 +16,7 @@ const NewQuestion = ({ ...props }) => {
 
   const [question, setQuestion] = useState<string>('');
   const [answer, setAnswer] = useState<string>('');
+  const [note, setNote] = useState<string>('');
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -29,13 +30,15 @@ const NewQuestion = ({ ...props }) => {
         subject,
         question,
         answer,
+        note,
       });
-      console.log('res', res);
+      console.log('Res from postInfo', res);
 
       if (res && res.status === 201) {
-        setVisible(true);
+        ToastAndroid.show(res?.data?.message, ToastAndroid.LONG);
+        handleCloseModal();
       } else {
-        // Handle unsuccessful submission
+        ToastAndroid.show(res?.data?.message, ToastAndroid.LONG);
       }
     } catch (error) {
       console.log('error', error);
@@ -49,6 +52,10 @@ const NewQuestion = ({ ...props }) => {
     setQuestion('');
     setAnswer('');
     navigation.navigate(screenName.HOME);
+  };
+
+  const showConfirmation = () => {
+    setVisible(true);
   };
 
   return (
@@ -69,16 +76,26 @@ const NewQuestion = ({ ...props }) => {
           multiline={true}
           onChange={setAnswer}
         />
+        <CustomTextInput
+          placeHolder="Add Extra Notes here"
+          value={note}
+          multiline={true}
+          onChange={setNote}
+        />
 
-        <CustomButton name="Submit" onPress={postInfo} />
+        <CustomButton name="Submit" onPress={showConfirmation} />
       </View>
       {visible && (
         <CustomModal
-          header="Question Submitted!"
+          header="Sure Want to Submit Question?"
           visible={visible}
-          setVisible={handleCloseModal}
+          onPressYes={postInfo}
+          onPressNo={() => setVisible(false)}
+          title={'Okay'}
+          showMultipleButtons={true}
         />
       )}
+
       {isDataLoading && <CustomLoader />}
     </View>
   );

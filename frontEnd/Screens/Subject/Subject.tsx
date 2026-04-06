@@ -1,28 +1,40 @@
+import { BASE_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, RefreshControl } from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import CustomAnimation from '../../component/CustomAnimation';
 import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
-import { Color } from '../../utils/Colors';
-import { screenName } from '../../utils/Title';
-import { BASE_URL } from '@env';
 import CustomModal from '../../component/CustomModal';
+import { Color } from '../../utils/Colors';
+import { screenName, string } from '../../utils/Title';
 
 const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   const { params } = route;
   const { subject } = params || {};
 
   const [subjectData, setSubjectData] = useState<any[]>([]);
-  const [fetchDataError, setFetchDataError] = useState<boolean>(false);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   const [pullToRefreshLoading, setPullToRefreshLoading] =
     useState<boolean>(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState<{
+    data: string;
+    value: boolean;
+  }>({
+    data: '',
+    value: false,
+  });
 
   const navigation = useNavigation();
 
-  console.log('subjectData', subjectData);
   useEffect(() => {
     console.log('BASE_URL', BASE_URL);
     getSubjectData();
@@ -37,7 +49,6 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
       if (res && res.status === 200 && res.data) setSubjectData(res.data.data);
       else {
         setSubjectData([]);
-        setFetchDataError(true);
         setIsDataLoading(false);
       }
     } catch (error) {
@@ -58,25 +69,44 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   };
 
   const handleDeleteItem = async (id: string) => {
+    console.log('${BASE_URL}${subject}/${id}', `${BASE_URL}${subject}/${id}`);
+
     try {
       const res = await axios.delete(`${BASE_URL}${subject}/${id}`);
       console.log('handleDeleteItem Res', res);
+
+      if (res && res.data.data && res.data.responseCode === 201) {
+        setDeleteModalVisible({ data: '', value: false });
+        pullToRefresh();
+        ToastAndroid.show(res?.data?.message, ToastAndroid.LONG);
+      } else {
+        console.log('Failed to delete question');
+        ToastAndroid.show('Failed to delete question', ToastAndroid.SHORT);
+      }
     } catch (error) {
       console.log('Error from handleDeleteItem', error);
     }
   };
 
+  const hideDeleteModal = () => {
+    setDeleteModalVisible({ data: '', value: false });
+  };
+
+  const updateQuestion = item => {
+    navigation.navigate(screenName.UPDATE_QUESTION, { subject: subject, item });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.screenHeader}>
-        Welcome to the {subject} Interview Preparation
+        {string.WELCOME.replace('subject', subject)}
       </Text>
       <CustomButton
-        name="Add a New one"
+        name={string.ADD_A_NEW_ONE}
         onPress={navigateToNewQuestionScreen}
       />
 
-      {!fetchDataError && !isDataLoading && subjectData.length > 0 ? (
+      {subjectData.length > 0 ? (
         <View>
           <Text style={styles.listHeader}>
             Summery of Questions and Answers
@@ -89,20 +119,30 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
                 onRefresh={pullToRefresh}
               />
             }
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={item => item.question}
             renderItem={({ index, item }) => (
               <View style={styles.listItem}>
                 <View style={styles.listItemContent}>
                   <Text>
-                    {index + 1}. {item.question}
+                    {index + 1}. Question:- {item.question}
                   </Text>
-                  <Text style={styles.listItemAnswer}>{item.answer}</Text>
+                  <Text style={styles.listItemAnswer}>
+                    Answer :- {item.answer}
+                  </Text>
+                  <Text style={styles.listItemAnswer}>
+                    Extra :- {item.note}
+                  </Text>
                 </View>
                 <View style={styles.listItemActions}>
-                  <CustomButton name="Update" onPress={() => {}} />
+                  <CustomButton
+                    name="Update"
+                    onPress={() => updateQuestion(item)}
+                  />
                   <CustomButton
                     name="Delete"
-                    onPress={() => handleDeleteItem(item._id)}
+                    onPress={() =>
+                      setDeleteModalVisible({ data: item._id, value: true })
+                    }
                   />
                 </View>
               </View>
@@ -110,14 +150,22 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
           />
         </View>
       ) : (
-        <View>
-          <CustomAnimation
-            path={require('../../assets/gif/No data Found.json')}
-          />
-        </View>
+        !isDataLoading && (
+          <View>
+            <CustomAnimation
+              path={require('../../assets/gif/No data Found.json')}
+            />
+          </View>
+        )
       )}
 
-      <CustomModal header="Are you sure ?" visible={true} setVisible={} />
+      <CustomModal
+        header="Are you sure want to delete ?"
+        visible={deleteModalVisible.value}
+        onPressNo={hideDeleteModal}
+        onPressYes={() => handleDeleteItem(deleteModalVisible.data)}
+        showMultipleButtons={true}
+      />
 
       {isDataLoading && <CustomLoader />}
     </View>
@@ -139,7 +187,7 @@ const styles = StyleSheet.create({
   },
   listItemAnswer: {
     paddingLeft: 15,
-    fontFamily: 'Nunito-ExtraLight',
+    fontFamily: 'Nunito-ExtraBold',
   },
   listItemActions: {
     flexDirection: 'row',

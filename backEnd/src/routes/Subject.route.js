@@ -1,7 +1,8 @@
 import express from "express";
 import subjectController from "../controller/subject.controller.js";
 import createQuestion from "../controller/question.controller.js";
-import deleteQuestion from "../controller/delete.question.model.js";
+import deleteQuestion from "../controller/delete.question.controller.js";
+import updateQuestion from "../controller/update.question.controller.js";
 
 const router = express.Router();
 
@@ -9,5 +10,6 @@ const router = express.Router();
 router.get("/:subject", subjectController);
 router.post("/new-question", createQuestion);
 router.delete("/:subject/:id", deleteQuestion);
+router.patch("/:subject/:id", updateQuestion);
 
 export default router;

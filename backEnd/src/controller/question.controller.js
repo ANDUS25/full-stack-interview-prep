@@ -2,13 +2,13 @@ import questionModel from "../models/question.model.js";
 
 const createQuestion = async (req, res) => {
   try {
-    const { subject, question, answer } = req.body;
+    const { subject, question, answer, note } = req.body;
     console.log("req.body", req.body);
 
-    if (!subject || !question || !answer) {
+    if (!subject || !question || !answer || !note) {
       return res.status(400).json({
         status: "error",
-        message: "Subject, question, and answer are required",
+        message: "Subject, question, answer, and note are required",
         responseCode: 400,
       });
     }
@@ -17,6 +17,7 @@ const createQuestion = async (req, res) => {
       subject: subject.toLowerCase(),
       question,
       answer,
+      note,
     });
 
     await newQuestion.save();
@@ -28,7 +29,7 @@ const createQuestion = async (req, res) => {
       responseCode: 201,
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 

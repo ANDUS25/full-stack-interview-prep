@@ -3,6 +3,7 @@ const screenName = {
   HOME: 'Home',
   SUBJECT: 'Subject',
   NEW_QUESTION: 'New Question',
+  UPDATE_QUESTION: 'Update Question',
 };
 
 const subject = {
@@ -18,4 +19,9 @@ const endPoint = {
   new_question: 'new-question',
 };
 
-export { screenName, subject, endPoint };
+const string = {
+  WELCOME: 'Welcome to the subject Interview Preparation',
+  ADD_A_NEW_ONE: 'Add a New one',
+};
+
+export { string, screenName, subject, endPoint };

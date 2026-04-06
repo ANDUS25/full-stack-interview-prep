@@ -2,21 +2,21 @@ import questionModel from "../models/question.model.js";
 
 const deleteQuestion = async (req, res) => {
   try {
-    // const { subject, question, answer } = req.body;
-    console.log("req.body from delete", req.body);
+    console.log("req.params", req.params);
 
-    if (!subject || !question || !answer) {
+    const { subject, id } = req.params;
+
+    if (!subject || !id) {
       return res.status(400).json({
         status: "error",
-        message: "Subject, question, and answer are required",
+        message: "Subject and ID are required",
         responseCode: 400,
       });
     }
 
     const newQuestion = new questionModel({
       subject: subject.toLowerCase(),
-      question,
-      answer,
+      _id: id,
     });
 
     await newQuestion.deleteOne();

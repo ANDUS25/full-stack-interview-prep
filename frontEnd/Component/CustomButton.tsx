@@ -12,7 +12,7 @@ const CustomButton: FC<CustomButtonProps> = ({ ...props }) => {
   const { name, style, onPress } = props;
 
   return (
-    <TouchableOpacity style={style ?? styles.buttonContainer} onPress={onPress}>
+    <TouchableOpacity style={[style, styles.buttonContainer]} onPress={onPress}>
       <Text style={styles.buttonNameView}>{name}</Text>
     </TouchableOpacity>
   );
@@ -26,6 +26,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginVertical: 10,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // width: '40%',
   },
-  buttonNameView: { color: Color.White, textAlign: 'center' },
+  buttonNameView: {
+    color: Color.White,
+    textAlign: 'center',
+    // width: '100%',
+  },
 });

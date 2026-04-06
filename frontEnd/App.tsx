@@ -7,6 +7,7 @@ import NewQuestion from './screens/NewQuestion/NewQuestion';
 import Splash from './screens/Splash/Splash';
 import Subject from './screens/Subject/Subject';
 import { screenName } from './utils/Title';
+import UpdateQuestion from './screens/updateQuestion/UpdateQuestion';
 
 const RootStack = createNativeStackNavigator({
   screens: {
@@ -22,6 +23,7 @@ const RootStack = createNativeStackNavigator({
       options: {
         title: screenName.HOME,
         headerShown: true,
+        headerTitleAlign: 'center',
       },
     },
     Subject: {
@@ -29,6 +31,7 @@ const RootStack = createNativeStackNavigator({
       options: {
         title: screenName.SUBJECT,
         headerShown: true,
+        headerTitleAlign: 'center',
       },
     },
     'New Question': {
@@ -36,6 +39,16 @@ const RootStack = createNativeStackNavigator({
       options: {
         title: screenName.NEW_QUESTION,
         headerShown: true,
+        // headerTitleStyle: { color: 'red' },
+        headerTitleAlign: 'center',
+      },
+    },
+    'Update Question': {
+      screen: UpdateQuestion,
+      options: {
+        title: screenName.UPDATE_QUESTION,
+        headerShown: true,
+        headerTitleAlign: 'center',
       },
     },
   },
