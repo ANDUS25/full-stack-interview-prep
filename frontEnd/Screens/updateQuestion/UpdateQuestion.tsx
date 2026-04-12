@@ -1,4 +1,5 @@
 import { BASE_URL } from '@env';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { ToastAndroid, View } from 'react-native';
@@ -6,8 +7,8 @@ import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
 import CustomModal from '../../component/CustomModal';
 import CustomTextInput from '../../component/CustomTextInput';
-import { screenName } from '../../utils/Title';
-import { useNavigation } from '@react-navigation/native';
+import { screenName, string } from '../../utils/Title';
+import { Color } from '../../utils/Colors';
 
 const UpdateQuestion = ({ ...props }) => {
   const { subject, item } = props?.route?.params || {};
@@ -61,36 +62,38 @@ const UpdateQuestion = ({ ...props }) => {
   };
 
   return (
-    <View>
-      <CustomTextInput
-        placeHolder="Add question here"
-        value={question}
-        multiline={true}
-        onChange={setQuestion}
-      />
-      <CustomTextInput
-        placeHolder="Add answer here"
-        value={answer}
-        multiline={true}
-        onChange={setAnswer}
-      />
-      <CustomTextInput
-        placeHolder="Add Extra Notes here"
-        value={note}
-        multiline={true}
-        onChange={setNote}
-      />
+    <View style={{ flex: 1, backgroundColor: Color.White }}>
+      <View style={{ marginHorizontal: 15 }}>
+        <CustomTextInput
+          placeHolder={string.ADD_Data_HERE.replace('data', 'question')}
+          value={question}
+          multiline={true}
+          onChange={setQuestion}
+        />
+        <CustomTextInput
+          placeHolder={string.ADD_Data_HERE.replace('data', 'answer')}
+          value={answer}
+          multiline={true}
+          onChange={setAnswer}
+        />
+        <CustomTextInput
+          placeHolder={string.ADD_Data_HERE.replace('data', 'extra notes')}
+          value={note}
+          multiline={true}
+          onChange={setNote}
+        />
 
-      <CustomButton name="Update" onPress={showConfirmationModal} />
+        <CustomButton name="Update" onPress={showConfirmationModal} />
 
-      <CustomModal
-        header="Are you sure want to update ?"
-        visible={showModel}
-        onPressNo={() => setShowModal(false)}
-        onPressYes={() => handleUpdateItem()}
-        showMultipleButtons={true}
-      />
-      {isDataLoading && <CustomLoader />}
+        <CustomModal
+          header="Are you sure want to update ?"
+          visible={showModel}
+          onPressNo={() => setShowModal(false)}
+          onPressYes={() => handleUpdateItem()}
+          showMultipleButtons={true}
+        />
+        {isDataLoading && <CustomLoader />}
+      </View>
     </View>
   );
 };

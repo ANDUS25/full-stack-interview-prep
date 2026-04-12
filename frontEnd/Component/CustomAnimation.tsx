@@ -19,7 +19,13 @@ const CustomAnimation = ({ ...props }) => {
 import { Dimensions, StyleSheet } from 'react-native';
 
 const style = StyleSheet.create({
-  lottie: { width: width, height: height, alignSelf: 'center' },
+  lottie: {
+    flex: 1,
+    width: width,
+    height: height / 2,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default CustomAnimation;

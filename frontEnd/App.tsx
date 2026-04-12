@@ -24,6 +24,7 @@ const RootStack = createNativeStackNavigator({
         title: screenName.HOME,
         headerShown: true,
         headerTitleAlign: 'center',
+        headerBackVisible: false,
       },
     },
     Subject: {
@@ -39,7 +40,6 @@ const RootStack = createNativeStackNavigator({
       options: {
         title: screenName.NEW_QUESTION,
         headerShown: true,
-        // headerTitleStyle: { color: 'red' },
         headerTitleAlign: 'center',
       },
     },

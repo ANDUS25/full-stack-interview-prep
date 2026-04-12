@@ -3,9 +3,9 @@ import { RouteProp, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
+  Dimensions,
   FlatList,
   RefreshControl,
-  StyleSheet,
   Text,
   ToastAndroid,
   View,
@@ -14,36 +14,39 @@ import CustomAnimation from '../../component/CustomAnimation';
 import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
 import CustomModal from '../../component/CustomModal';
-import { Color } from '../../utils/Colors';
 import { screenName, string } from '../../utils/Title';
+import {
+  DeleteModalInterface,
+  SubjectDataInterface,
+  SubjectRenderItemInterface,
+} from '../../utils/interface';
+import styles from './Styles';
 
 const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   const { params } = route;
   const { subject } = params || {};
 
-  const [subjectData, setSubjectData] = useState<any[]>([]);
+  const [subjectData, setSubjectData] = useState<SubjectDataInterface[]>([]);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   const [pullToRefreshLoading, setPullToRefreshLoading] =
     useState<boolean>(false);
-  const [deleteModalVisible, setDeleteModalVisible] = useState<{
-    data: string;
-    value: boolean;
-  }>({
-    data: '',
-    value: false,
-  });
+  const [deleteModalVisible, setDeleteModalVisible] =
+    useState<DeleteModalInterface>({
+      data: '',
+      value: false,
+    });
 
   const navigation = useNavigation();
+  const { height } = Dimensions.get('window');
 
   useEffect(() => {
-    console.log('BASE_URL', BASE_URL);
     getSubjectData();
-  }, []);
+  }, [subject]);
 
   const getSubjectData = async () => {
     setIsDataLoading(true);
     try {
-      const res = await axios.get(`${BASE_URL}${subject}`);
+      const res = await axios.get(`${BASE_URL}${subject.toLowerCase()}`);
       console.log('res', res);
 
       if (res && res.status === 200 && res.data) setSubjectData(res.data.data);
@@ -69,8 +72,6 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   };
 
   const handleDeleteItem = async (id: string) => {
-    console.log('${BASE_URL}${subject}/${id}', `${BASE_URL}${subject}/${id}`);
-
     try {
       const res = await axios.delete(`${BASE_URL}${subject}/${id}`);
       console.log('handleDeleteItem Res', res);
@@ -92,107 +93,92 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
     setDeleteModalVisible({ data: '', value: false });
   };
 
-  const updateQuestion = item => {
+  const updateQuestion = (item: SubjectDataInterface) => {
     navigation.navigate(screenName.UPDATE_QUESTION, { subject: subject, item });
+  };
+
+  const renderItem = ({ index, item }: SubjectRenderItemInterface) => {
+    return (
+      <View style={styles.listItem}>
+        <View style={styles.innerInfoView}>
+          <Text style={styles.listItemAnswer}>{index + 1}.</Text>
+          <View style={styles.listItemContent}>
+            <Text style={styles.listItemAnswer}>
+              {string.QUESTION}:- {item.question}
+            </Text>
+            <Text style={styles.listItemAnswer}>
+              {string.ANSWER} :- {item.answer}
+            </Text>
+            <Text style={styles.listItemAnswer}>
+              {string.NOTE} :- {item.note}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.listItemActions}>
+          <CustomButton name="Update" onPress={() => updateQuestion(item)} />
+          <CustomButton
+            name="Delete"
+            onPress={() =>
+              setDeleteModalVisible({ data: item._id, value: true })
+            }
+          />
+        </View>
+      </View>
+    );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.screenHeader}>
-        {string.WELCOME.replace('subject', subject)}
-      </Text>
-      <CustomButton
-        name={string.ADD_A_NEW_ONE}
-        onPress={navigateToNewQuestionScreen}
-      />
+      <View style={styles.innerContainer}>
+        <Text style={styles.screenHeader}>
+          {string.WELCOME.replace('subject', subject)}
+        </Text>
 
-      {subjectData.length > 0 ? (
-        <View>
-          <Text style={styles.listHeader}>
-            Summery of Questions and Answers
-          </Text>
-          <FlatList
-            data={subjectData}
-            refreshControl={
-              <RefreshControl
-                refreshing={pullToRefreshLoading}
-                onRefresh={pullToRefresh}
-              />
-            }
-            keyExtractor={item => item.question}
-            renderItem={({ index, item }) => (
-              <View style={styles.listItem}>
-                <View style={styles.listItemContent}>
-                  <Text>
-                    {index + 1}. Question:- {item.question}
-                  </Text>
-                  <Text style={styles.listItemAnswer}>
-                    Answer :- {item.answer}
-                  </Text>
-                  <Text style={styles.listItemAnswer}>
-                    Extra :- {item.note}
-                  </Text>
-                </View>
-                <View style={styles.listItemActions}>
-                  <CustomButton
-                    name="Update"
-                    onPress={() => updateQuestion(item)}
-                  />
-                  <CustomButton
-                    name="Delete"
-                    onPress={() =>
-                      setDeleteModalVisible({ data: item._id, value: true })
-                    }
-                  />
-                </View>
-              </View>
-            )}
-          />
-        </View>
-      ) : (
-        !isDataLoading && (
-          <View>
-            <CustomAnimation
-              path={require('../../assets/gif/No data Found.json')}
+        <CustomButton
+          name={string.ADD_A_NEW_ONE}
+          onPress={navigateToNewQuestionScreen}
+        />
+
+        {isDataLoading ? (
+          <View style={{ height: height / 2 }}>
+            <CustomLoader />
+          </View>
+        ) : (
+          <View style={styles.scrollContainer}>
+            <Text style={styles.listHeader}>
+              Summery of Questions and Answers
+            </Text>
+            <FlatList
+              data={subjectData}
+              refreshControl={
+                <RefreshControl
+                  refreshing={pullToRefreshLoading}
+                  onRefresh={pullToRefresh}
+                />
+              }
+              scrollEnabled={true}
+              keyExtractor={item => item.question}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <CustomAnimation
+                  path={require('../../assets/gif/No data Found.json')}
+                />
+              }
             />
           </View>
-        )
-      )}
+        )}
 
-      <CustomModal
-        header="Are you sure want to delete ?"
-        visible={deleteModalVisible.value}
-        onPressNo={hideDeleteModal}
-        onPressYes={() => handleDeleteItem(deleteModalVisible.data)}
-        showMultipleButtons={true}
-      />
-
-      {isDataLoading && <CustomLoader />}
+        <CustomModal
+          header={string.ARE_YOU_SURE_WANT_TO_DELETE}
+          visible={deleteModalVisible.value}
+          onPressNo={hideDeleteModal}
+          onPressYes={() => handleDeleteItem(deleteModalVisible.data)}
+          showMultipleButtons={true}
+        />
+      </View>
     </View>
   );
 };
 
 export default Subject;
-
-const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 15, backgroundColor: Color.White },
-  listHeader: { fontWeight: 'bold', fontSize: 18, textAlign: 'center' },
-  listItem: {
-    marginVertical: 7,
-    justifyContent: 'space-between',
-  },
-  listItemContent: {
-    flexDirection: 'column',
-    width: '100%',
-  },
-  listItemAnswer: {
-    paddingLeft: 15,
-    fontFamily: 'Nunito-ExtraBold',
-  },
-  listItemActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  screenHeader: { fontSize: 20, textAlign: 'center', marginVertical: 20 },
-});

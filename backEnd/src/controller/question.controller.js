@@ -5,7 +5,7 @@ const createQuestion = async (req, res) => {
     const { subject, question, answer, note } = req.body;
     console.log("req.body", req.body);
 
-    if (!subject || !question || !answer || !note) {
+    if (!subject || !question || !answer) {
       return res.status(400).json({
         status: "error",
         message: "Subject, question, answer, and note are required",

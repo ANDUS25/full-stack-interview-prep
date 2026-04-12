@@ -26,13 +26,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginVertical: 10,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // width: '40%',
   },
   buttonNameView: {
     color: Color.White,
     textAlign: 'center',
-    // width: '100%',
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
   },
 });
