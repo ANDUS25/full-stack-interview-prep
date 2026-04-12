@@ -41,7 +41,7 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
 
   useEffect(() => {
     getSubjectData();
-  }, [subject]);
+  }, [deleteModalVisible]);
 
   const getSubjectData = async () => {
     setIsDataLoading(true);
@@ -53,8 +53,11 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
       else {
         setSubjectData([]);
         setIsDataLoading(false);
+        navigation.navigate(screenName.HOME);
       }
     } catch (error) {
+      setIsDataLoading(false);
+      navigation.navigate(screenName.HOME);
       console.log('Error from getSubjectData', error);
     } finally {
       setIsDataLoading(false);
@@ -157,7 +160,7 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
                 />
               }
               scrollEnabled={true}
-              keyExtractor={item => item.question}
+              keyExtractor={(item, index) => item.question + index}
               renderItem={renderItem}
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={

@@ -69,18 +69,21 @@ const NewQuestion = ({ ...props }) => {
           value={question}
           multiline={true}
           onChange={setQuestion}
+          style={{ fontFamily: 'Nunito-Regular' }}
         />
         <CustomTextInput
           placeHolder="Add answer here"
           value={answer}
           multiline={true}
           onChange={setAnswer}
+          style={{ fontFamily: 'Nunito-Regular' }}
         />
         <CustomTextInput
           placeHolder="Add Extra Notes here"
           value={note}
           multiline={true}
           onChange={setNote}
+          style={{ fontFamily: 'Nunito-Regular' }}
         />
 
         <CustomButton name="Submit" onPress={showConfirmation} />

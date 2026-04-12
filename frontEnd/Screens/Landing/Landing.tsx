@@ -2,11 +2,18 @@ import { BASE_URL } from '@env';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import {
+  BackHandler,
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  View,
+} from 'react-native';
 import CustomAnimation from '../../component/CustomAnimation';
 import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
-import { screenName } from '../../utils/Title';
+import CustomModal from '../../component/CustomModal';
+import { screenName, string } from '../../utils/Title';
 import { SubjectDataInterface } from '../../utils/interface';
 
 const Landing = () => {
@@ -14,15 +21,33 @@ const Landing = () => {
 
   const [subjectData, setSubjectData] = useState<string[]>([]);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
+  const [showBackConfirmationModal, setShowBackConfirmationModal] =
+    useState<boolean>(false);
 
   const handleSubjectNavigation = (subjectName: string) => {
     navigation.navigate(screenName.SUBJECT, { subject: subjectName });
   };
 
+  const { width } = Dimensions.get('window');
+  // Get Subject-wise Data
   useEffect(() => {
     getSubjectData();
   }, []);
 
+  // Back Button Handler
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        showConfirmationModal();
+        return true;
+      },
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  // call subject data API
   const getSubjectData = async () => {
     setIsDataLoading(true);
     try {
@@ -33,7 +58,9 @@ const Landing = () => {
           (item: SubjectDataInterface) => item?.subject,
         );
 
-        const subjectUniqueData = [...new Set(getSubjectName)];
+        const subjectUniqueData: string[] = [
+          ...new Set(getSubjectName),
+        ] as string[];
 
         setSubjectData(subjectUniqueData);
       } else {
@@ -47,30 +74,73 @@ const Landing = () => {
     }
   };
 
+  // show confirmation modal when user click on back button
+  const showConfirmationModal = () => {
+    setShowBackConfirmationModal(true);
+  };
+
+  const navigateToAddSubjectScreen = () => {
+    navigation.navigate(screenName.UPDATE_QUESTION, {
+      isComingFrom: screenName.HOME,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         {isDataLoading ? (
-          <CustomLoader />
-        ) : (
-          <FlatList
-            ListEmptyComponent={
-              <CustomAnimation
-                path={require('../../assets/gif/No data Found.json')}
-              />
-            }
-            data={subjectData}
-            renderItem={({ item }) => {
-              return (
-                <CustomButton
-                  name={item?.toUpperCase()}
-                  onPress={() => handleSubjectNavigation(item)}
-                />
-              );
+          <View
+            style={{
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
-          />
+          >
+            <CustomLoader />
+          </View>
+        ) : (
+          <View>
+            <FlatList
+              ListEmptyComponent={
+                <CustomAnimation
+                  path={require('../../assets/gif/No data Found.json')}
+                />
+              }
+              keyExtractor={item => item + item}
+              data={subjectData}
+              renderItem={({ item }) => {
+                return (
+                  <CustomButton
+                    name={item?.toUpperCase()}
+                    onPress={() => handleSubjectNavigation(item)}
+                  />
+                );
+              }}
+            />
+          </View>
         )}
       </View>
+      <View
+        style={{
+          alignItems: 'center',
+          position: 'absolute',
+          bottom: 0,
+          right: width / 2 - (width * 0.3) / 2,
+        }}
+      >
+        <CustomButton
+          name="Add new subject"
+          onPress={() => navigateToAddSubjectScreen()}
+        />
+      </View>
+
+      <CustomModal
+        header={string.EXIT_THE_APP}
+        visible={showBackConfirmationModal}
+        onPressNo={() => setShowBackConfirmationModal(false)}
+        onPressYes={() => BackHandler.exitApp()}
+        showMultipleButtons={true}
+      />
     </View>
   );
 };

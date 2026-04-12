@@ -11,45 +11,52 @@ import UpdateQuestion from './screens/updateQuestion/UpdateQuestion';
 
 const RootStack = createNativeStackNavigator({
   screens: {
-    Splash: {
+    [screenName.SPLASH]: {
       screen: Splash,
       options: {
         title: screenName.SPLASH,
         headerShown: false,
       },
     },
-    Home: {
+    [screenName.HOME]: {
       screen: Landing,
       options: {
         title: screenName.HOME,
         headerShown: true,
         headerTitleAlign: 'center',
         headerBackVisible: false,
+        headerTitleStyle: { fontFamily: 'Nunito-MediumItalic' },
       },
     },
-    Subject: {
+    [screenName.SUBJECT]: {
       screen: Subject,
       options: {
         title: screenName.SUBJECT,
         headerShown: true,
         headerTitleAlign: 'center',
+        headerTitleStyle: { fontFamily: 'Nunito-MediumItalic' },
       },
     },
-    'New Question': {
+    [screenName.NEW_QUESTION]: {
       screen: NewQuestion,
       options: {
         title: screenName.NEW_QUESTION,
         headerShown: true,
         headerTitleAlign: 'center',
+        headerTitleStyle: { fontFamily: 'Nunito-MediumItalic' },
       },
     },
-    'Update Question': {
+    [screenName.UPDATE_QUESTION]: {
       screen: UpdateQuestion,
-      options: {
-        title: screenName.UPDATE_QUESTION,
+      options: ({ route }: any) => ({
+        title:
+          route?.params?.isComingFrom === screenName.HOME
+            ? screenName.ADD_SUBJECT
+            : screenName.UPDATE_QUESTION,
         headerShown: true,
         headerTitleAlign: 'center',
-      },
+        headerTitleStyle: { fontFamily: 'Nunito-Italic' },
+      }),
     },
   },
 });
