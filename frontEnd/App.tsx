@@ -2,32 +2,53 @@ import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Landing from './Screens/Landing/Landing';
-import Splash from './Screens/Splash/Splash';
-import { screeName } from './utils/Title';
-import Subject from './Screens/Subject/Subject';
+import Landing from './screens/Landing/Landing';
+import NewQuestion from './screens/NewQuestion/NewQuestion';
+import Splash from './screens/Splash/Splash';
+import Subject from './screens/Subject/Subject';
+import { screenName } from './utils/Title';
+import UpdateQuestion from './screens/updateQuestion/UpdateQuestion';
 
 const RootStack = createNativeStackNavigator({
   screens: {
     Splash: {
       screen: Splash,
       options: {
-        title: screeName.SPLASH,
+        title: screenName.SPLASH,
         headerShown: false,
       },
     },
     Home: {
       screen: Landing,
       options: {
-        title: screeName.HOME,
+        title: screenName.HOME,
         headerShown: true,
+        headerTitleAlign: 'center',
+        headerBackVisible: false,
       },
     },
     Subject: {
       screen: Subject,
       options: {
-        title: screeName.SUBJECT,
+        title: screenName.SUBJECT,
         headerShown: true,
+        headerTitleAlign: 'center',
+      },
+    },
+    'New Question': {
+      screen: NewQuestion,
+      options: {
+        title: screenName.NEW_QUESTION,
+        headerShown: true,
+        headerTitleAlign: 'center',
+      },
+    },
+    'Update Question': {
+      screen: UpdateQuestion,
+      options: {
+        title: screenName.UPDATE_QUESTION,
+        headerShown: true,
+        headerTitleAlign: 'center',
       },
     },
   },

@@ -1,16 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
-import LottieView from 'lottie-react-native';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
+import CustomAnimation from '../../component/CustomAnimation';
+import { screenName } from '../../utils/Title';
 import style from './styles';
-import { screeName } from '../../utils/Title';
 
 const Splash = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate(screeName.HOME as never);
+      navigation.navigate(screenName.HOME as never);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -18,12 +18,7 @@ const Splash = () => {
 
   return (
     <View style={style.container}>
-      <LottieView
-        source={require('../../assets/Programmer.json')}
-        autoPlay
-        loop
-        style={style.lottie}
-      />
+      <CustomAnimation path={require('../../assets/gif/Programmer.json')} />
     </View>
   );
 };

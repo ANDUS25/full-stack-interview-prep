@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Color } from '../utils/Colors';
 
-const CustomButton = ({ ...props }) => {
+interface CustomButtonProps {
+  name: string;
+  onPress: () => void;
+  style?: any;
+}
+
+const CustomButton: FC<CustomButtonProps> = ({ ...props }) => {
   const { name, style, onPress } = props;
 
   return (
-    <TouchableOpacity style={style ?? styles.buttonContainer} onPress={onPress}>
+    <TouchableOpacity style={[style, styles.buttonContainer]} onPress={onPress}>
       <Text style={styles.buttonNameView}>{name}</Text>
     </TouchableOpacity>
   );
@@ -21,5 +27,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
   },
-  buttonNameView: { color: Color.White, textAlign: 'center' },
+  buttonNameView: {
+    color: Color.White,
+    textAlign: 'center',
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
+  },
 });
