@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   header: {
     textAlign: 'center',
     fontSize: 20,
+    fontFamily: 'Nunito-Regular',
   },
   buttonView: {
     flexDirection: 'row',

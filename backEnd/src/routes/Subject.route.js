@@ -4,13 +4,16 @@ import createQuestion from "../controller/question.controller.js";
 import deleteQuestion from "../controller/delete.question.controller.js";
 import updateQuestion from "../controller/update.question.controller.js";
 import getAllSubjects from "../controller/allSubject.controller.js";
+import addNewSubject from "../controller/addNewSubject.Controller.js";
 
 const router = express.Router();
 
 // This route is to get subject specific data
 router.get("/", getAllSubjects);
 router.get("/:subject", subjectController);
+router.get("/:subject", subjectController);
 router.post("/new-question", createQuestion);
+router.post("/addNewSubject", addNewSubject);
 router.delete("/:subject/:id", deleteQuestion);
 router.patch("/:subject/:id", updateQuestion);
 

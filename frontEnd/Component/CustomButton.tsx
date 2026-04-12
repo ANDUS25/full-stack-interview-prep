@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
     color: Color.White,
     textAlign: 'center',
     fontSize: 14,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Roboto-Bold',
   },
 });
