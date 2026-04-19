@@ -14,7 +14,9 @@ import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
 import CustomModal from '../../component/CustomModal';
 import { screenName, string } from '../../utils/Title';
-import { SubjectDataInterface } from '../../utils/interface';
+import { SubjectDataInterface } from '../../utils/Interface';
+
+const { width } = Dimensions.get('window');
 
 const Landing = () => {
   const navigation = useNavigation<any>();
@@ -28,7 +30,6 @@ const Landing = () => {
     navigation.navigate(screenName.SUBJECT, { subject: subjectName });
   };
 
-  const { width } = Dimensions.get('window');
   // Get Subject-wise Data
   useEffect(() => {
     getSubjectData();
@@ -85,17 +86,20 @@ const Landing = () => {
     });
   };
 
+  const renderItem = ({ item }: { item: string }) => {
+    return (
+      <CustomButton
+        name={item?.toUpperCase()}
+        onPress={() => handleSubjectNavigation(item)}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         {isDataLoading ? (
-          <View
-            style={{
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <View style={styles.getLoaderContainer}>
             <CustomLoader />
           </View>
         ) : (
@@ -108,28 +112,14 @@ const Landing = () => {
               }
               keyExtractor={item => item + item}
               data={subjectData}
-              renderItem={({ item }) => {
-                return (
-                  <CustomButton
-                    name={item?.toUpperCase()}
-                    onPress={() => handleSubjectNavigation(item)}
-                  />
-                );
-              }}
+              renderItem={renderItem}
             />
           </View>
         )}
       </View>
-      <View
-        style={{
-          alignItems: 'center',
-          position: 'absolute',
-          bottom: 0,
-          right: width / 2 - (width * 0.3) / 2,
-        }}
-      >
+      <View style={styles.subjectButtonContainer}>
         <CustomButton
-          name="Add new subject"
+          name={string.ADD_NEW_SUBJECT}
           onPress={() => navigateToAddSubjectScreen()}
         />
       </View>
@@ -148,6 +138,17 @@ const Landing = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'white' },
   innerContainer: { marginHorizontal: 15 },
+  getLoaderContainer: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  subjectButtonContainer: {
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    right: width / 2 - (width * 0.3) / 2,
+  },
 });
 
 export default Landing;

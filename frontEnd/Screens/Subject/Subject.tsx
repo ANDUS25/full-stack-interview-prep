@@ -1,7 +1,7 @@
 import { BASE_URL } from '@env';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -14,36 +14,33 @@ import CustomAnimation from '../../component/CustomAnimation';
 import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
 import CustomModal from '../../component/CustomModal';
-import { screenName, string } from '../../utils/Title';
+import { CommonStrings } from '../../utils/Enum';
 import {
   DeleteModalInterface,
   SubjectDataInterface,
   SubjectRenderItemInterface,
-} from '../../utils/interface';
+} from '../../utils/Interface';
+import { screenName, string } from '../../utils/Title';
 import styles from './Styles';
 
 const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   const { params } = route;
   const { subject } = params || {};
 
+  console.log('CommonStrings', subject.split(' '));
+
   const [subjectData, setSubjectData] = useState<SubjectDataInterface[]>([]);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   const [pullToRefreshLoading, setPullToRefreshLoading] =
     useState<boolean>(false);
   const [deleteModalVisible, setDeleteModalVisible] =
-    useState<DeleteModalInterface>({
-      data: '',
-      value: false,
-    });
+    useState<DeleteModalInterface>({ data: '', value: false });
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
+
   const { height } = Dimensions.get('window');
 
-  useEffect(() => {
-    getSubjectData();
-  }, [deleteModalVisible]);
-
-  const getSubjectData = async () => {
+  const getSubjectData = useCallback(async () => {
     setIsDataLoading(true);
     try {
       const res = await axios.get(`${BASE_URL}${subject.toLowerCase()}`);
@@ -62,7 +59,11 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
     } finally {
       setIsDataLoading(false);
     }
-  };
+  }, [navigation, subject]);
+
+  useEffect(() => {
+    getSubjectData();
+  }, [deleteModalVisible, getSubjectData]);
 
   const navigateToNewQuestionScreen = () => {
     navigation.navigate(screenName.NEW_QUESTION, { subject: subject });
@@ -100,6 +101,15 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
     navigation.navigate(screenName.UPDATE_QUESTION, { subject: subject, item });
   };
 
+  const makeFunLetterCapital = (text: string) => {
+    const textInUpperCase = text
+      .split(' ')
+      .map(item => item.charAt(0).toUpperCase() + item.slice(1))
+      .join(' ');
+
+    return textInUpperCase;
+  };
+
   const renderItem = ({ index, item }: SubjectRenderItemInterface) => {
     return (
       <View style={styles.listItem}>
@@ -118,9 +128,12 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
           </View>
         </View>
         <View style={styles.listItemActions}>
-          <CustomButton name="Update" onPress={() => updateQuestion(item)} />
           <CustomButton
-            name="Delete"
+            name={string.UPDATE}
+            onPress={() => updateQuestion(item)}
+          />
+          <CustomButton
+            name={string.DELETE}
             onPress={() =>
               setDeleteModalVisible({ data: item._id, value: true })
             }
@@ -134,7 +147,10 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <Text style={styles.screenHeader}>
-          {string.WELCOME.replace('subject', subject)}
+          {string.WELCOME.replace(
+            `${CommonStrings.SUBJECT}`,
+            `${makeFunLetterCapital(subject)}`,
+          )}
         </Text>
 
         <CustomButton
@@ -149,8 +165,9 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
         ) : (
           <View style={styles.scrollContainer}>
             <Text style={styles.listHeader}>
-              Summery of Questions and Answers
+              {string.SUMMERY_OF_QUESTIONS_AND_ANSWERS}
             </Text>
+
             <FlatList
               data={subjectData}
               refreshControl={

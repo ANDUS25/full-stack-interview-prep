@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
-import { CustomModalProps } from '../utils/interface';
+import { CustomModalProps } from '../utils/Interface';
 import CustomButton from './CustomButton';
+import { string } from '../utils/Title';
 
 const CustomModal: FC<CustomModalProps> = ({ ...props }) => {
   const {
@@ -23,12 +24,12 @@ const CustomModal: FC<CustomModalProps> = ({ ...props }) => {
             {showMultipleButtons ? (
               <View style={styles.buttonView}>
                 <CustomButton
-                  name="No"
+                  name={string.NO}
                   onPress={onPressNo || (() => {})}
                   style={styles.commonButtonView}
                 />
                 <CustomButton
-                  name="Yes"
+                  name={string.YES}
                   onPress={onPressYes || (() => {})}
                   style={styles.commonButtonView}
                 />
