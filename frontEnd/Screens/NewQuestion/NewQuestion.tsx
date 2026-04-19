@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   commonFontFamily: {
     fontFamily: 'Nunito-Regular',
     color: Color.White,
-    backgroundColor: '#bf73d9',
+    backgroundColor: Color.ThemeBackgroundColor,
   },
 });
 

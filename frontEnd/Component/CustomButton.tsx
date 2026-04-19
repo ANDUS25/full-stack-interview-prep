@@ -22,7 +22,7 @@ export default CustomButton;
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: '#a663de',
+    backgroundColor: Color.ThemeBackgroundColor,
     padding: 10,
     borderRadius: 10,
     marginVertical: 10,

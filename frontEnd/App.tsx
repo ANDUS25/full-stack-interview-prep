@@ -30,6 +30,7 @@ const RootStack = createNativeStackNavigator({
           fontFamily: 'Nunito-MediumItalic',
           color: Color.White,
         },
+        headerBackIcon: false,
       },
     },
     [screenName.SUBJECT]: {
