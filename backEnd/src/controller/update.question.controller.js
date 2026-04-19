@@ -3,8 +3,8 @@ import { Title } from "../utils/String.js";
 
 const updateQuestion = async (req, res) => {
   try {
-    console.log("req.params", req.params);
-    console.log("req.body", req.body);
+    // console.log("req.params", req.params);
+    // console.log("req.body", req.body);
 
     const { subject, id } = req.params;
     const { question, answer, note } = req.body; // Fields to update
