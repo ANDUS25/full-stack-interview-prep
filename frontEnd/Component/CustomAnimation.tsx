@@ -1,5 +1,6 @@
 import LottieView from 'lottie-react-native';
 import React from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -15,8 +16,6 @@ const CustomAnimation = ({ ...props }) => {
     />
   );
 };
-
-import { Dimensions, StyleSheet } from 'react-native';
 
 const style = StyleSheet.create({
   lottie: {

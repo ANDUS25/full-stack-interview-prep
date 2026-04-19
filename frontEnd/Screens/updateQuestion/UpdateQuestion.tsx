@@ -27,7 +27,7 @@ const UpdateQuestion = ({ ...props }) => {
   const [showModel, setShowModal] = useState<boolean>(false);
   const [newSubject, setNewSubject] = useState<string>(subject || '');
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   const isComingFromHome = (): boolean => {
     return isComingFrom === screenName.HOME;

@@ -13,9 +13,9 @@ import CustomAnimation from '../../component/CustomAnimation';
 import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
 import CustomModal from '../../component/CustomModal';
-import { screenName, string } from '../../utils/Title';
-import { SubjectDataInterface } from '../../utils/Interface';
 import { Color } from '../../utils/Colors';
+import { SubjectDataInterface } from '../../utils/Interface';
+import { screenName, string } from '../../utils/Title';
 
 const { width } = Dimensions.get('window');
 

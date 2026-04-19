@@ -6,9 +6,9 @@ import Landing from './screens/Landing/Landing';
 import NewQuestion from './screens/NewQuestion/NewQuestion';
 import Splash from './screens/Splash/Splash';
 import Subject from './screens/Subject/Subject';
-import { screenName } from './utils/Title';
 import UpdateQuestion from './screens/updateQuestion/UpdateQuestion';
 import { Color } from './utils/Colors';
+import { screenName } from './utils/Title';
 
 const RootStack = createNativeStackNavigator({
   screens: {
@@ -30,7 +30,7 @@ const RootStack = createNativeStackNavigator({
           fontFamily: 'Nunito-MediumItalic',
           color: Color.White,
         },
-        headerBackIcon: false,
+        headerBackTitleVisible: false,
       },
     },
     [screenName.SUBJECT]: {
