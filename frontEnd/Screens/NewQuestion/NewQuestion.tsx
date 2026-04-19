@@ -102,9 +102,17 @@ const NewQuestion = ({ ...props }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 15, backgroundColor: Color.White },
+  container: {
+    flex: 1,
+    paddingHorizontal: 15,
+    backgroundColor: Color.ThemeColor,
+  },
   questionTextView: { textAlign: 'center', fontSize: 20 },
-  commonFontFamily: { fontFamily: 'Nunito-Regular' },
+  commonFontFamily: {
+    fontFamily: 'Nunito-Regular',
+    color: Color.White,
+    backgroundColor: '#bf73d9',
+  },
 });
 
 export default NewQuestion;

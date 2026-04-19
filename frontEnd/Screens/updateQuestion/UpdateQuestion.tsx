@@ -175,7 +175,7 @@ const UpdateQuestion = ({ ...props }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Color.White },
+  container: { flex: 1, backgroundColor: Color.ThemeColor },
   ParentView: { marginHorizontal: 15 },
 });
 

@@ -26,13 +26,14 @@ const CustomTextInput = ({ ...props }: CustomTextInputProps) => {
 
 const styles = StyleSheet.create({
   textStyle: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#FEFFA7',
     borderBottomWidth: 1,
     borderColor: Color.Gray,
     padding: 10,
     marginVertical: 10,
     borderRadius: 10,
     fontFamily: 'Nunito-Regular',
+    color: Color.ThemeColor,
   },
 });
 

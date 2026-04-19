@@ -12,7 +12,6 @@ const Splash = () => {
     const timer = setTimeout(() => {
       navigation.navigate(screenName.HOME as never);
     }, 3000);
-
     return () => clearTimeout(timer);
   }, [navigation]);
 

@@ -15,6 +15,7 @@ import CustomLoader from '../../component/CustomLoader';
 import CustomModal from '../../component/CustomModal';
 import { screenName, string } from '../../utils/Title';
 import { SubjectDataInterface } from '../../utils/Interface';
+import { Color } from '../../utils/Colors';
 
 const { width } = Dimensions.get('window');
 
@@ -136,7 +137,7 @@ const Landing = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'white' },
+  container: { flex: 1, backgroundColor: Color.ThemeColor },
   innerContainer: { marginHorizontal: 15 },
   getLoaderContainer: {
     height: '100%',
