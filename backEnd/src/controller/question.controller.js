@@ -1,4 +1,5 @@
 import questionModel from "../models/question.model.js";
+import { Title } from "../utils/String.js";
 
 const createQuestion = async (req, res) => {
   try {
@@ -7,8 +8,8 @@ const createQuestion = async (req, res) => {
 
     if (!subject || !question || !answer) {
       return res.status(400).json({
-        status: "error",
-        message: "Subject, question, answer, and note are required",
+        status: Title.ERROR,
+        message: Title.SUBJECT_QUESTION_ANSWER_NOTE_REQUIRED,
         responseCode: 400,
       });
     }
@@ -23,8 +24,8 @@ const createQuestion = async (req, res) => {
     await newQuestion.save();
 
     return res.status(201).json({
-      status: "success",
-      message: "Question created successfully",
+      status: Title.success,
+      message: Title.QUESTION_CREATED_SUCCESSFULLY,
       data: newQuestion,
       responseCode: 201,
     });

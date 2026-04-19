@@ -1,19 +1,19 @@
 import questionModel from "../models/question.model.js";
+import { Title } from "../utils/String.js";
 
 const addNewSubject = async (req, res) => {
   try {
     const { subject, question, answer, note } = req.body;
 
-    console.log("req.body", req.body);
+    // console.log("req.body", req.body);
 
     if (!subject || !question || !answer) {
       return res.status(400).json({
-        status: "error",
-        message: "Subject, question, answer, and note are required",
+        status: Title.ERROR,
+        message: Title.SUBJECT_QUESTION_ANSWER_NOTE_REQUIRED,
         responseCode: 400,
       });
     }
-    console.log("here");
 
     const newQuestion = new questionModel({
       subject: subject.toLowerCase(),
@@ -25,8 +25,8 @@ const addNewSubject = async (req, res) => {
     await newQuestion.save();
 
     return res.status(201).json({
-      status: "success",
-      message: "Question created successfully",
+      status: Title.success,
+      message: Title.QUESTION_CREATED_SUCCESSFULLY,
       responseCode: 201,
     });
   } catch (error) {

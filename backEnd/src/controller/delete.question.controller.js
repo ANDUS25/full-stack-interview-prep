@@ -1,15 +1,16 @@
 import questionModel from "../models/question.model.js";
+import { Title } from "../utils/String.js";
 
 const deleteQuestion = async (req, res) => {
   try {
-    console.log("req.params", req.params);
+    // console.log("req.params", req.params);
 
     const { subject, id } = req.params;
 
     if (!subject || !id) {
       return res.status(400).json({
-        status: "error",
-        message: "Subject and ID are required",
+        status: Title.ERROR,
+        message: Title.SUBJECT_AND_ID_ARE_REQUIRED,
         responseCode: 400,
       });
     }
@@ -22,8 +23,8 @@ const deleteQuestion = async (req, res) => {
     await newQuestion.deleteOne();
 
     return res.status(201).json({
-      status: "success",
-      message: "Question deleted successfully",
+      status: Title.success,
+      message: Title.QUESTION_DELETED_SUCCESSFULLY,
       data: newQuestion,
       responseCode: 201,
     });

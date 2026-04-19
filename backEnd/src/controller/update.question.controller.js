@@ -1,4 +1,5 @@
 import questionModel from "../models/question.model.js";
+import { Title } from "../utils/String.js";
 
 const updateQuestion = async (req, res) => {
   try {
@@ -10,8 +11,8 @@ const updateQuestion = async (req, res) => {
 
     if (!subject || !id) {
       return res.status(400).json({
-        status: "error",
-        message: "Subject and ID are required",
+        status: Title.ERROR,
+        message: Title.SUBJECT_AND_ID_ARE_REQUIRED,
         responseCode: 400,
       });
     }
@@ -25,15 +26,15 @@ const updateQuestion = async (req, res) => {
 
     if (!updatedQuestion) {
       return res.status(404).json({
-        status: "error",
-        message: "Question not found",
+        status: Title.ERROR,
+        message: Title.QUESTION_NOT_FOUND,
         responseCode: 404,
       });
     }
 
     return res.status(200).json({
-      status: "success",
-      message: "Question updated successfully",
+      status: Title.success,
+      message: Title.QUESTION_UPDATED_SUCCESSFULLY,
       data: updatedQuestion,
       responseCode: 200,
     });
