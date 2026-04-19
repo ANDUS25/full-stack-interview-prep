@@ -2,13 +2,13 @@ import { BASE_URL } from '@env';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Text, ToastAndroid, View } from 'react-native';
+import { StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import CustomButton from '../../component/CustomButton';
 import CustomLoader from '../../component/CustomLoader';
 import CustomModal from '../../component/CustomModal';
 import CustomTextInput from '../../component/CustomTextInput';
 import { Color } from '../../utils/Colors';
-import { endPoint, screenName } from '../../utils/Title';
+import { endPoint, screenName, string } from '../../utils/Title';
 
 const NewQuestion = ({ ...props }) => {
   const { route } = props;
@@ -20,7 +20,7 @@ const NewQuestion = ({ ...props }) => {
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   const postInfo = async () => {
     setIsDataLoading(true);
@@ -32,7 +32,6 @@ const NewQuestion = ({ ...props }) => {
         answer,
         note,
       });
-      console.log('Res from postInfo', res);
 
       if (res && res.status === 201) {
         ToastAndroid.show(res?.data?.message, ToastAndroid.LONG);
@@ -41,7 +40,7 @@ const NewQuestion = ({ ...props }) => {
         ToastAndroid.show(res?.data?.message, ToastAndroid.LONG);
       }
     } catch (error) {
-      console.log('error', error);
+      console.log(string.ERROR_IN_POST_INFO_API, error);
     } finally {
       setIsDataLoading(false);
     }
@@ -59,42 +58,40 @@ const NewQuestion = ({ ...props }) => {
   };
 
   return (
-    <View
-      style={{ flex: 1, paddingHorizontal: 15, backgroundColor: Color.White }}
-    >
-      <Text style={{ textAlign: 'center', fontSize: 20 }}>Add a question</Text>
+    <View style={styles.container}>
+      <Text style={styles.questionTextView}>{string.ADD_A_QUESTION}</Text>
       <View>
         <CustomTextInput
-          placeHolder="Add question here"
+          placeHolder={string.ADD_QUESTION_HERE}
           value={question}
           multiline={true}
           onChange={setQuestion}
-          style={{ fontFamily: 'Nunito-Regular' }}
+          style={styles.commonFontFamily}
         />
         <CustomTextInput
-          placeHolder="Add answer here"
+          placeHolder={string.ADD_ANSWER_HERE}
           value={answer}
           multiline={true}
           onChange={setAnswer}
-          style={{ fontFamily: 'Nunito-Regular' }}
+          style={styles.commonFontFamily}
         />
         <CustomTextInput
-          placeHolder="Add Extra Notes here"
+          placeHolder={string.Add_Extra_Notes_here}
           value={note}
           multiline={true}
           onChange={setNote}
-          style={{ fontFamily: 'Nunito-Regular' }}
+          style={styles.commonFontFamily}
         />
 
-        <CustomButton name="Submit" onPress={showConfirmation} />
+        <CustomButton name={string.SUBMIT} onPress={showConfirmation} />
       </View>
       {visible && (
         <CustomModal
-          header="Sure Want to Submit Question?"
+          header={string.SURE_WANT_TO_SUBMIT_QUESTION}
           visible={visible}
           onPressYes={postInfo}
           onPressNo={() => setVisible(false)}
-          title={'Okay'}
+          title={string.OKAY}
           showMultipleButtons={true}
         />
       )}
@@ -103,5 +100,11 @@ const NewQuestion = ({ ...props }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { flex: 1, paddingHorizontal: 15, backgroundColor: Color.White },
+  questionTextView: { textAlign: 'center', fontSize: 20 },
+  commonFontFamily: { fontFamily: 'Nunito-Regular' },
+});
 
 export default NewQuestion;
