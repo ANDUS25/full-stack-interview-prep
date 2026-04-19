@@ -78,7 +78,7 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
   const handleDeleteItem = async (id: string) => {
     try {
       const res = await axios.delete(`${BASE_URL}${subject}/${id}`);
-      console.log('handleDeleteItem Res', res);
+      // console.log('handleDeleteItem Res', res);
 
       if (res && res.data.data && res.data.responseCode === 201) {
         setDeleteModalVisible({ data: '', value: false });
@@ -86,7 +86,7 @@ const Subject = ({ route }: { route: RouteProp<any, any> }) => {
         ToastAndroid.show(res?.data?.message, ToastAndroid.LONG);
       } else {
         console.log('Failed to delete question');
-        ToastAndroid.show('Failed to delete question', ToastAndroid.SHORT);
+        ToastAndroid.show(string.FAILED_TO_DELETE_QUESTION, ToastAndroid.SHORT);
       }
     } catch (error) {
       console.log('Error from handleDeleteItem', error);

@@ -11,7 +11,6 @@ const router = express.Router();
 // This route is to get subject specific data
 router.get("/", getAllSubjects);
 router.get("/:subject", subjectController);
-router.get("/:subject", subjectController);
 router.post("/new-question", createQuestion);
 router.post("/addNewSubject", addNewSubject);
 router.delete("/:subject/:id", deleteQuestion);

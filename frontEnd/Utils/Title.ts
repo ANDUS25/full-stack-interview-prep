@@ -36,6 +36,7 @@ const string = {
   UPDATE: 'Update',
   WELCOME: 'Welcome to the subject Interview Preparation',
   YES: 'Yes',
+  FAILED_TO_DELETE_QUESTION: 'Failed to delete question',
 };
 
 export { endPoint, screenName, string };
