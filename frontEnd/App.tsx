@@ -8,6 +8,7 @@ import Splash from './screens/Splash/Splash';
 import Subject from './screens/Subject/Subject';
 import { screenName } from './utils/Title';
 import UpdateQuestion from './screens/updateQuestion/UpdateQuestion';
+import { Color } from './utils/Colors';
 
 const RootStack = createNativeStackNavigator({
   screens: {
@@ -24,8 +25,12 @@ const RootStack = createNativeStackNavigator({
         title: screenName.HOME,
         headerShown: true,
         headerTitleAlign: 'center',
-        headerBackVisible: false,
-        headerTitleStyle: { fontFamily: 'Nunito-MediumItalic' },
+        headerBackButtonDisplayMode: 'minimal',
+        headerTitleStyle: {
+          fontFamily: 'Nunito-MediumItalic',
+          color: Color.White,
+        },
+        headerBackIcon: false,
       },
     },
     [screenName.SUBJECT]: {
@@ -34,7 +39,11 @@ const RootStack = createNativeStackNavigator({
         title: screenName.SUBJECT,
         headerShown: true,
         headerTitleAlign: 'center',
-        headerTitleStyle: { fontFamily: 'Nunito-MediumItalic' },
+        headerTintColor: Color.White,
+        headerTitleStyle: {
+          fontFamily: 'Nunito-MediumItalic',
+          color: Color.White,
+        },
       },
     },
     [screenName.NEW_QUESTION]: {
@@ -43,7 +52,11 @@ const RootStack = createNativeStackNavigator({
         title: screenName.NEW_QUESTION,
         headerShown: true,
         headerTitleAlign: 'center',
-        headerTitleStyle: { fontFamily: 'Nunito-MediumItalic' },
+        headerTintColor: Color.White,
+        headerTitleStyle: {
+          fontFamily: 'Nunito-MediumItalic',
+          color: Color.White,
+        },
       },
     },
     [screenName.UPDATE_QUESTION]: {
@@ -55,9 +68,17 @@ const RootStack = createNativeStackNavigator({
             : screenName.UPDATE_QUESTION,
         headerShown: true,
         headerTitleAlign: 'center',
-        headerTitleStyle: { fontFamily: 'Nunito-Italic' },
+        headerTintColor: Color.White,
+        headerTitleStyle: {
+          fontFamily: 'Nunito-MediumItalic',
+          color: Color.White,
+        },
       }),
     },
+  },
+  screenOptions: {
+    headerTintColor: Color.White,
+    headerStyle: { backgroundColor: Color.ThemeColor },
   },
 });
 

@@ -2,12 +2,13 @@ import { StyleSheet } from 'react-native';
 import { Color } from '../../utils/Colors';
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Color.White },
+  container: { flex: 1, backgroundColor: Color.ThemeColor },
   innerContainer: {
     marginHorizontal: 15,
   },
   listHeader: {
     fontSize: 18,
+    color: Color.White,
     textAlign: 'center',
     fontFamily: 'Nunito-Regular',
   },
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
   },
   listItemAnswer: {
     paddingLeft: 10,
+    color: Color.White,
     fontFamily: 'Nunito-ExtraBold',
     textAlign: 'justify',
   },
@@ -34,6 +36,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: 'center',
     marginVertical: 20,
+    color: Color.White,
     fontFamily: 'Nunito-Regular',
   },
   scrollContainer: { marginBottom: 400 },
