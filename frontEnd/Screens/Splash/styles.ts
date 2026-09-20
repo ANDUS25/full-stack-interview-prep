@@ -6,7 +6,7 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.ThemeColor,
+    backgroundColor: Color.Black,
   },
   lottie: { width: 350, height: 350 },
 });

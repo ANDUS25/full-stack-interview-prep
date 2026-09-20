@@ -1,5 +1,6 @@
 import questionModel from "../models/question.model.js";
-import { Title } from "../utils/String.js";
+// import { Title } from "../utils/String.js";
+import { Title } from "../utils/String.ts";
 
 const subjectController = async (req, res) => {
   const data = req?.params?.subject;

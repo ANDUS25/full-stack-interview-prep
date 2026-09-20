@@ -27,15 +27,16 @@ const UpdateQuestion = ({ ...props }) => {
   const [showModel, setShowModal] = useState<boolean>(false);
   const [newSubject, setNewSubject] = useState<string>(subject || '');
 
+  console.log('isDataLoading');
+  console.log('isDataLoading', isDataLoading);
+
   const navigation = useNavigation<any>();
 
-  const isComingFromHome = (): boolean => {
-    return isComingFrom === screenName.HOME;
-  };
+  const isComingFromHome = isComingFrom === screenName.HOME;
 
   useEffect(() => {
     navigation.setOptions({
-      title: isComingFromHome()
+      title: isComingFromHome
         ? screenName.ADD_SUBJECT
         : screenName.UPDATE_QUESTION,
     });
@@ -47,6 +48,7 @@ const UpdateQuestion = ({ ...props }) => {
 
   const addNewSubjectWithInfo = async () => {
     setIsDataLoading(true);
+    console.log('alos here');
 
     try {
       const res = await axios.post(`${BASE_URL}addNewSubject`, {
@@ -55,6 +57,7 @@ const UpdateQuestion = ({ ...props }) => {
         answer,
         note,
       });
+      console.log('res', res);
 
       if (res?.data?.responseCode === 201 && res?.data?.status === 'success') {
         setShowModal(false);
@@ -71,6 +74,8 @@ const UpdateQuestion = ({ ...props }) => {
   };
 
   const handleUpdateItem = async () => {
+    console.log('dfsjdf');
+
     setIsDataLoading(true);
     try {
       const res = await axios.patch(`${BASE_URL}${subject}/${item._id}`, {
@@ -100,13 +105,15 @@ const UpdateQuestion = ({ ...props }) => {
   };
 
   const handleFunction = () => {
-    isComingFromHome() ? addNewSubjectWithInfo() : handleUpdateItem();
+    console.log('resresres');
+
+    true ? addNewSubjectWithInfo() : handleUpdateItem();
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.ParentView}>
-        {isComingFromHome() && (
+        {isComingFromHome && (
           <CustomTextInput
             placeHolder={string.ADD_Data_HERE.replace(
               StringReplace.DATA,
@@ -150,22 +157,20 @@ const UpdateQuestion = ({ ...props }) => {
 
         <CustomButton
           name={
-            isComingFromHome()
-              ? CommonStrings.ADD_SUBJECT
-              : CommonStrings.UPDATE
+            isComingFromHome ? CommonStrings.ADD_SUBJECT : CommonStrings.UPDATE
           }
           onPress={showConfirmationModal}
         />
 
         <CustomModal
           header={
-            isComingFromHome()
+            isComingFromHome
               ? string.ARE_YOU_SURE_WANT_TO_ADD_SUBJECT
               : string.ARE_YOU_SURE_WANT_TO_UPDATE
           }
           visible={showModel}
           onPressNo={() => setShowModal(false)}
-          onPressYes={handleFunction}
+          onPressYes={() => handleFunction()}
           showMultipleButtons={true}
         />
         {isDataLoading && <CustomLoader />}
@@ -175,7 +180,7 @@ const UpdateQuestion = ({ ...props }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Color.ThemeColor },
+  container: { flex: 1, backgroundColor: Color.Black },
   ParentView: { marginHorizontal: 15 },
 });
 

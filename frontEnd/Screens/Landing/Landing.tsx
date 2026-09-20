@@ -1,11 +1,12 @@
 import { BASE_URL } from '@env';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   BackHandler,
   Dimensions,
   FlatList,
+  RefreshControl,
   StyleSheet,
   View,
 } from 'react-native';
@@ -24,6 +25,7 @@ const Landing = () => {
 
   const [subjectData, setSubjectData] = useState<string[]>([]);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [showBackConfirmationModal, setShowBackConfirmationModal] =
     useState<boolean>(false);
 
@@ -36,22 +38,48 @@ const Landing = () => {
     getSubjectData();
   }, []);
 
-  // Back Button Handler
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        showConfirmationModal();
-        return true;
-      },
-    );
-
-    return () => backHandler.remove();
+  // Show confirmation modal when user clicks back button
+  const showConfirmationModal = useCallback(() => {
+    setShowBackConfirmationModal(true);
   }, []);
 
+  // Hardware back button handler for Android (active only when Home is focused)
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        showConfirmationModal();
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
+
+      return () => subscription.remove();
+    }, [showConfirmationModal]),
+  );
+
+  // Intercept header back button or swipe-back on Home screen
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+      if (e.data.action.type === 'NAVIGATE' || e.data.action.type === 'PUSH') {
+        return;
+      }
+      e.preventDefault();
+      showConfirmationModal();
+    });
+
+    return unsubscribe;
+  }, [navigation, showConfirmationModal]);
+
   // call subject data API
-  const getSubjectData = async () => {
-    setIsDataLoading(true);
+  const getSubjectData = async (isRefresh = false) => {
+    if (isRefresh) {
+      setIsRefreshing(true);
+    } else {
+      setIsDataLoading(true);
+    }
     try {
       const res = await axios.get(`${BASE_URL}`);
 
@@ -67,18 +95,17 @@ const Landing = () => {
         setSubjectData(subjectUniqueData);
       } else {
         setSubjectData([]);
-        setIsDataLoading(false);
       }
     } catch (error) {
       console.log('Error from getSubjectData', error);
     } finally {
       setIsDataLoading(false);
+      setIsRefreshing(false);
     }
   };
 
-  // show confirmation modal when user click on back button
-  const showConfirmationModal = () => {
-    setShowBackConfirmationModal(true);
+  const onRefresh = () => {
+    getSubjectData(true);
   };
 
   const navigateToAddSubjectScreen = () => {
@@ -104,16 +131,25 @@ const Landing = () => {
             <CustomLoader />
           </View>
         ) : (
-          <View>
+          <View style={styles.flatListContainer}>
             <FlatList
               ListEmptyComponent={
                 <CustomAnimation
                   path={require('../../assets/gif/No data Found.json')}
                 />
               }
-              keyExtractor={item => item + item}
+              keyExtractor={item => item}
               data={subjectData}
               renderItem={renderItem}
+              contentContainerStyle={styles.flatListContent}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isRefreshing}
+                  onRefresh={onRefresh}
+                  colors={[Color.ThemeBackgroundColor, Color.White]}
+                  tintColor={Color.White}
+                />
+              }
             />
           </View>
         )}
@@ -137,8 +173,13 @@ const Landing = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Color.ThemeColor },
-  innerContainer: { marginHorizontal: 15 },
+  container: { flex: 1, backgroundColor: Color.Black },
+  innerContainer: { flex: 1, marginHorizontal: 15 },
+  flatListContainer: { flex: 1 },
+  flatListContent: {
+    flexGrow: 1,
+    paddingBottom: 100,
+  },
   getLoaderContainer: {
     height: '100%',
     justifyContent: 'center',

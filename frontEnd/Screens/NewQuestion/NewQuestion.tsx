@@ -33,7 +33,10 @@ const NewQuestion = ({ ...props }) => {
         note,
       });
 
+      console.log('res', res);
+
       if (res && res.status === 201) {
+        setIsDataLoading(false);
         ToastAndroid.show(res?.data?.message, ToastAndroid.LONG);
         handleCloseModal();
       } else {
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 15,
-    backgroundColor: Color.ThemeColor,
+    backgroundColor: Color.Black,
   },
   questionTextView: { textAlign: 'center', fontSize: 20 },
   commonFontFamily: {

@@ -25,7 +25,7 @@ const string = {
   ARE_YOU_SURE_WANT_TO_UPDATE: 'Are you sure want to update ?',
   DELETE: 'Delete',
   ERROR_IN_POST_INFO_API: 'Error in Post Info API',
-  EXIT_THE_APP: `Hold on!', 'Are you sure you want to exit the App?`,
+  EXIT_THE_APP: 'Are you sure you want to exit the App?',
   NO: 'No',
   NOTE: 'Note',
   OKAY: 'Okay',

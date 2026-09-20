@@ -1,5 +1,5 @@
 import questionModel from "../models/question.model.js";
-import { Title } from "../utils/String.js";
+import { Title } from "../utils/String.ts";
 
 const updateQuestion = async (req, res) => {
   try {

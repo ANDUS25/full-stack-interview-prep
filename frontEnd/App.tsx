@@ -25,12 +25,10 @@ const RootStack = createNativeStackNavigator({
         title: screenName.HOME,
         headerShown: true,
         headerTitleAlign: 'center',
-        headerBackButtonDisplayMode: 'minimal',
         headerTitleStyle: {
           fontFamily: 'Nunito-MediumItalic',
           color: Color.White,
         },
-        headerBackTitleVisible: false,
       },
     },
     [screenName.SUBJECT]: {
